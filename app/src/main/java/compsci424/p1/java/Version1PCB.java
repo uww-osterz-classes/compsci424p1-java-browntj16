@@ -1,7 +1,7 @@
 /* COMPSCI 424 Program 1
  * Name:
  */
-package main.java.compsci424.p1.java;
+package compsci424.p1.java;
 import java.util.LinkedList;
 /**
  * The process control block structure that is used to track a

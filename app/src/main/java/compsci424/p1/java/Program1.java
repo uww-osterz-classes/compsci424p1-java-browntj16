@@ -7,8 +7,9 @@
  * classes, methods, and data structures that you need to solve the
  * problem and display your solution in the correct format.
  */
-package compsci424.p1.java;
-
+package main.java.compsci424.p1.java;
+import java.util.LinkedList;
+import java.util.Scanner;
 /**
  * Main class for this program. The required steps have been copied
  * into the main method as comments. Feel free to add more comments to
@@ -26,7 +27,24 @@ public class Program1 {
         // 1. Ask the user to enter commands of the form "create N",
         //    "destroy N", or "end", where N is an integer between 0 
         //    and 15.
-
+    	System.out.println("Create or destroy N, where N is an integer between 0 and 15 (ex: create 1), or end by typing 'end':"); 
+    	Scanner inp = new Scanner(System.in);
+    	String userInp = inp.nextLine();	
+    	LinkedList<String> commandList = new LinkedList<String>();
+    	
+    	Version1 v1 = new Version1();
+    	Version2 v2 = new Version2();
+    	
+    	while (!userInp.equals("end")) {
+    		commandList.add(userInp);
+    		userInp = inp.nextLine();
+    	}
+    	for (int i = 0; i < commandList.size(); i++) {
+    		parseCommand(commandList.get(i), v1,v2);
+    	}
+    	
+    	
+    	
         // 2. While the user has not typed "end", continue accepting
         //    commands. Add each command to a list of actions to take 
         //    while you run the simulation.
@@ -60,4 +78,25 @@ public class Program1 {
         // You can delete it.
         System.out.println("Builds without errors and runs to completion.");
     }
+
+	private static void parseCommand(String command, Version1 v1, Version2 v2) {
+		String arr[] = command.split(" ");
+		int num = Integer.parseInt(arr[1]);
+		if(arr[0].equals("destroy")) {
+			v1.destroy(num);
+			v1.showProcessInfo();
+			v2.destroy(num);
+			v2.showProcessInfo();
+		}
+		else if(arr[0].equals("create")){
+			v1.create(num);
+			v1.showProcessInfo();
+			v2.create(num);
+			v2.showProcessInfo();
+		}
+		else {
+			System.out.println("Invalid command entered.");
+		}
+		
+	}
 }

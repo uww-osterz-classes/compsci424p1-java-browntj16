@@ -48,6 +48,7 @@ public class Program1 {
     	for (int i = 0; i < commandList.size(); i++) {
     		parseCommand2(commandList.get(i), v2);
     	}
+	/*
     	long start = System.currentTimeMillis();
     	for (int i = 0; i < 200; i++) {
     		for (int j = 0; j < commandList.size(); j++) {
@@ -65,6 +66,7 @@ public class Program1 {
     	}
     	end = System.currentTimeMillis() - start;
     	System.out.println("Total run time for v2 is " + end);
+	    */
         // 2. While the user has not typed "end", continue accepting
         //    commands. Add each command to a list of actions to take 
         //    while you run the simulation.

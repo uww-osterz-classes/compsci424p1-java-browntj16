@@ -7,7 +7,7 @@
  * classes, methods, and data structures that you need to solve the
  * problem and display your solution in the correct format.
  */
-package p1;
+package compsci424.p1.java;
 import java.util.LinkedList;
 import java.util.Scanner;
 /**

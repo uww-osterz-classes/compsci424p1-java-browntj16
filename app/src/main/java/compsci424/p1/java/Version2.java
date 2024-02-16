@@ -118,6 +118,7 @@ public class Version2 {
     		//manages relationships between targets siblings
     		manageSiblings(target);
     		destroyChildren(target);
+		pcbArr[parentIndex]=null;
     		
     	}
         // 2. Adjust connections within the hierarchy graph as needed to

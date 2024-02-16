@@ -31,24 +31,29 @@ public class Program1 {
     	Scanner inp = new Scanner(System.in);
     	String userInp = inp.nextLine();	
     	LinkedList<String> commandList = new LinkedList<String>();
-    	
+    	//creating version objects
     	Version1 v1 = new Version1();
     	Version2 v2 = new Version2();
     	
+    	// will run until user types end. will add all commands to a list and 
+    	// run them later
     	while (!userInp.equals("end")) {
     		commandList.add(userInp);
     		userInp = inp.nextLine();
     	}
-    	
+    	//running all commands for v1
     	System.out.println("Version 1: ");
     	for (int i = 0; i < commandList.size(); i++) {
     		parseCommand1(commandList.get(i), v1);
     	}
+    	//running all commands for v2
     	System.out.println("Version 2: ");
     	for (int i = 0; i < commandList.size(); i++) {
     		parseCommand2(commandList.get(i), v2);
     	}
-	/*
+    	
+    	
+    	// time check for v1
     	long start = System.currentTimeMillis();
     	for (int i = 0; i < 200; i++) {
     		for (int j = 0; j < commandList.size(); j++) {
@@ -57,7 +62,7 @@ public class Program1 {
     	}
     	long end = System.currentTimeMillis() - start;
     	System.out.println("Total run time for v1 is " + end);
-    	
+    	//time check for v2
     	start = System.currentTimeMillis();
     	for (int i = 0; i < 200; i++) {
     		for (int j = 0; j < commandList.size(); j++) {
@@ -66,43 +71,24 @@ public class Program1 {
     	}
     	end = System.currentTimeMillis() - start;
     	System.out.println("Total run time for v2 is " + end);
-	    */
-        // 2. While the user has not typed "end", continue accepting
-        //    commands. Add each command to a list of actions to take 
-        //    while you run the simulation.
-        // 3. When the user types "end" (or optionally any word that 
-        //    is not "create" or "destroy"), stop accepting commands 
-        //    and complete the following steps.
-        //
-        // Hint: Steps 2 and 3 refer to the same loop. ;-)
-
-        // 4. Create an object of the Version 1 class and an object of
-        //    the Version 2 class.
-
-        // 5. Run the command sequence once with the Version 1 object, 
-        //    calling its showProcessTree method after each command to
-        //    show the changes in the tree after each command.
-
-        // 6. Repeat step 5, but with the Version 2 object.
-
-        // 7. Store the current system time in a variable
-
-        // ... then run the command sequence 200 times with Version 1.
-
-        // ... After this, store the new current system time in a
-        //     second variable. Subtract the start time from the end 
-        //     time to get the Version 1 running time, then display 
-        //     the Version 1 running time.
-
-        // 8. Repeat step 7, but with the Version 2 object.
-
-        // This line is here just to test the Gradle build procedure.
-        // You can delete it.
+    	
+       
         System.out.println("Builds without errors and runs to completion.");
     }
-
+    /**
+     * You may be looking at this and its clones and be thinking "what are the point of having
+     * 4 of these?". uh well I made one method to execute a given command to both versions
+     * but then I read a bit more and realized that they have to run separately to check for 
+     * time. then i also realized that the output doesnt want showProcessInfo to run either.
+     * reading has once again proven to be my achilles heel. 
+     * @param command: a String, something like "destroy n"
+     * @param v1: a Version1PCB object to apply commands to 
+     */
 	private static void parseCommand1(String command, Version1 v1) {
 		String arr[] = command.split(" ");
+		// felt wrong to not add any catch in case something went wrong with input so
+		// i just slapped a quick and easy try/catch block on this. and who said
+		// i dont prepare for bad input?
 		try {
 			int num = Integer.parseInt(arr[1]);
 			if(arr[0].equals("destroy")) {
@@ -123,6 +109,11 @@ public class Program1 {
 		
 		
 	}
+	/**
+	 * same as last method, but doesnt call showProcessInfo so you can actually read the output
+	 * @param command
+	 * @param v1
+	 */
 	private static void parseCommand1NoShow(String command, Version1 v1) {
 		String arr[] = command.split(" ");
 		try {
@@ -145,6 +136,12 @@ public class Program1 {
 		
 		
 	}
+	/**
+	 * pretty much the same as parseCommand1. read that methods description if you wanna know 
+	 * the stupid reason i made this method
+	 * @param command
+	 * @param v2
+	 */
 	private static void parseCommand2(String command, Version2 v2) {
 		String arr[] = command.split(" ");
 		try {
@@ -167,6 +164,11 @@ public class Program1 {
 		
 		
 	}
+	/**
+	 * check description for last one
+	 * @param command
+	 * @param v2
+	 */
 	private static void parseCommand2NoShow(String command, Version2 v2) {
 		String arr[] = command.split(" ");
 		try {

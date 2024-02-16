@@ -24,7 +24,10 @@ public class Version1PCB {
 		this.parent = parent;
 		children = new LinkedList<Integer>();
 	}
-	
+	/**
+	 * 
+	 * lots of getters and setters!
+	 */
 	public int getPCBID() {
 		return pcbID;
 	}
@@ -43,9 +46,17 @@ public class Version1PCB {
 	public void setChildren(LinkedList<Integer> children) {
 		this.children = children;
 	}
+	/**
+	 * adds child to list
+	 * @param pcb
+	 */
 	public void addChild(int pcb) {
 		children.add(pcb);
 	}
+	/**
+	 * removes child from list and returns it
+	 * @return child position (int)
+	 */
 	public int popChild() {
 		return children.pop();
 	}

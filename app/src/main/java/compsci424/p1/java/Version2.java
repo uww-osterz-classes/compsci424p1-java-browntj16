@@ -52,48 +52,13 @@ public class Version2 {
         		// check to see if it has a first child
         		newPCB.setParent(parentIndex); 
         		pcbArr[freePos] = newPCB;
-        		if(pcbArr[parentIndex].getFirstChild() > -1) {
-        			int sib = pcbArr[parentIndex].getFirstChild();
-        			while(sib != -1) {
-        				//checking if we found a space for the youngest sibling
-        				if (pcbArr[sib].getYoungerSibling() == -1) {
-        					//mark the former youngest childs younger sibling as the pcb
-        					pcbArr[sib].setYoungerSibling(freePos); 
-        					//mark the new pcb's older sibling as the former youngest
-        					pcbArr[freePos].setOlderSibling(sib); 
-        					//mark the new pcb's younger sibling as -1 (for not existing)
-        					pcbArr[freePos].setYoungerSibling(-1); 
-        					sib=-1;
-        				}
-        				else {
-        					// iterate to the next youngest sibling
-        					sib = pcbArr[sib].getYoungerSibling();
-        				}
-        			}
-        		}
-        		else {
-        			pcbArr[parentIndex].setFirstChild(freePos); 
-        			pcbArr[freePos].setParent(parentIndex); 
-        			pcbArr[freePos].setOlderSibling(-1);
-        			pcbArr[freePos].setYoungerSibling(-1);
-        		}
-    
-        		
+        		addChild(parentIndex, freePos);
+
         	}
     	}
     	else {
     		System.out.println("PCB array is full.");
     	}
-
-        // Assuming you've found the PCB for parentPid in the PCB array:
-        // 1. Allocate and initialize a free PCB object from the array
-        //    of PCB objects
-
-        // 2. Connect the new PCB object to its parent, its older
-        //    sibling (if any), and its younger sibling (if any)
-
-        // You can decide what the return value(s), if any, should be.
-        // If you change the return type/value(s), update the Javadoc.
         return 0; // often means "success" or "terminated normally"
     }
 
@@ -107,32 +72,25 @@ public class Version2 {
         // If targetPid is not in the process hierarchy, do nothing; 
         // your code may return an error code or message in this case,
         // but it should not halt
-    	
-        // Assuming you've found the PCB for targetPid in the PCB array:
-        // 1. Recursively destroy all descendants of targetPid, if it
-        //    has any, and mark their PCBs as "free" in the PCB array 
-        //    (i.e., deallocate them)
     	int parentIndex = containsPID(targetPid);
     	if (parentIndex > -1) {
     		Version2PCB target = pcbArr[parentIndex];
     		//manages relationships between targets siblings
     		manageSiblings(target);
+    		//destroys all children
     		destroyChildren(target);
-		pcbArr[parentIndex]=null;
+    		//removes target from array
+    		pcbArr[parentIndex]=null;
     		
     	}
-        // 2. Adjust connections within the hierarchy graph as needed to
-        //    re-connect the graph
-
-        // 3. Deallocate targetPid's PCB and mark its PCB array entry
-        //    as "free"
-
-        // You can decide what the return value(s), if any, should be.
-        // If you change the return type/value(s), update the Javadoc.
        return 0; // often means "success" or "terminated normally"
    }
 
-    
+    /**
+     * checks to see if a parent id is in array
+     * @param pID
+     * @return returns index of parent, or -1 if not found
+     */
     private int containsPID(int pID) {
 		for (int i = 0; i < pcbArr.length;i++) {
 			//System.out.println(pcbArr[i].pcbID + " "+ pID);
@@ -145,7 +103,10 @@ public class Version2 {
 		}		
 		return -1;
     }
-    
+    /**
+     * finds the first free space in the array
+     * @return returns first free index, or -1 if no such index exists
+     */
     private int findFreeSpace() {
     	for (int i = 0; i < pcbArr.length; i++) {
     		if(null == pcbArr[i]) {
@@ -172,8 +133,13 @@ public class Version2 {
     	}
     	System.out.println();
     }
-    
+    /**
+     * manage siblings preps a given target for removal by altering its siblings.
+     * basically, it fixes any missing links caused by removing target
+     * @param target: a v2pcb object 
+     */
     private void manageSiblings(Version2PCB target) {
+    	//checking if older sibling exists
     	if(target.getOlderSibling() > -1) {
 			// checking if it also has a younger sibling
 			if (target.getYoungerSibling() > -1) {
@@ -201,32 +167,88 @@ public class Version2 {
 			}
     }
     }
+    /**
+     * recursively destroys all children and itself
+     * @param target
+     */
     private void destroyChildren(Version2PCB target) {
+    	//checks to see if target even has any children
     	if(target.getFirstChild() > -1) {
-    		int child = target.getFirstChild();		
+    		int child = target.getFirstChild();	
+    		//destroys all of targets child children. destroys targets grandchildren if you will
     		destroyChildren(pcbArr[child]);
+    		//destroys all of targets first child siblins then itself
     		destroyYoungerSiblingAndSelf(pcbArr[child]);	
     	}
     }
+    /**
+     * recursively destroys all of targets younger children then itself
+     * @param target
+     */
     private void destroyYoungerSiblingAndSelf(Version2PCB target) {
+    	//if target has any younger siblings we recursively destroy them
     	if(target.getYoungerSibling() > -1) {
     		destroyYoungerSiblingAndSelf(pcbArr[target.getYoungerSibling()]);
     	}
+    	// if target has any children we recursively destroy them
     	if (target.getFirstChild() > -1) {
     		destroyChildren(pcbArr[target.getFirstChild()]);
     	}
+    	//destroys itself
     	pcbArr[target.getParent()].setFirstChild(-1); 
     	pcbArr[target.getPCBID()] = null;
     	target = null;
     	
     	
     }
+    /**
+     * prints all siblings
+     * @param sib
+     */
    private void printAllSiblings(Version2PCB sib) {
 	   if(sib.getYoungerSibling() > -1) {
 		   System.out.print(sib.getYoungerSibling()+ " ");
 		   printAllSiblings(pcbArr[sib.getYoungerSibling()]);
 	   }
    }
+   /**
+    * adds a child to given parent index
+    * @param parentIndex
+    * @param freePos
+    */
+   private void addChild(int parentIndex, int freePos) {
+	   // if parent already has a first child
+	   if(pcbArr[parentIndex].getFirstChild() > -1) {
+			int sib = pcbArr[parentIndex].getFirstChild();
+			//traversing through all siblings
+			while(sib != -1) {
+				//checking if we found a space for the youngest sibling
+				if (pcbArr[sib].getYoungerSibling() == -1) {
+					//mark the former youngest childs younger sibling as the pcb
+					pcbArr[sib].setYoungerSibling(freePos); 
+					//mark the new pcb's older sibling as the former youngest
+					pcbArr[freePos].setOlderSibling(sib); 
+					//mark the new pcb's younger sibling as -1 (for not existing)
+					pcbArr[freePos].setYoungerSibling(-1); 
+					sib=-1;
+				}
+				else {
+					// iterate to the next youngest sibling
+					sib = pcbArr[sib].getYoungerSibling();
+				}
+			}
+		}
+		//occurs if there is no first child for parent
+		else {
+			pcbArr[parentIndex].setFirstChild(freePos); 
+			pcbArr[freePos].setParent(parentIndex); 
+			pcbArr[freePos].setOlderSibling(-1);
+			pcbArr[freePos].setYoungerSibling(-1);
+		}
+   }
+   /**
+    * prints info about the array 
+    */
    void showProcessInfo() {
 	   for (int i = 0; i < pcbArr.length; i++) {
 		   if (pcbArr[i] != null) {

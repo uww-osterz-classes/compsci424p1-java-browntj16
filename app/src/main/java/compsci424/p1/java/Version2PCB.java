@@ -17,12 +17,18 @@ public class Version2PCB {
 	private int firstChild;
 	private int ySibling;
 	private int oSibling;
-	
+	/**
+	 * i dont think i ever plan on using the default constructor
+	 */
 	public Version2PCB() {
 		pcbID = 1;
 		
 	}
-	
+	/**
+	 * initializes ysibling, osibling, and first child as -1 (or non existent)
+	 * @param parent
+	 * @param pcbID
+	 */
 	public Version2PCB(int parent, int pcbID) {
 		this.pcbID = pcbID;
 		this.parent = parent;
@@ -30,6 +36,11 @@ public class Version2PCB {
 		oSibling = -1;
 		firstChild = -1;
 	}
+	
+	/**
+	 * getters and setters fo days
+	 * @return
+	 */
 	public int getPCBID() {
 		return pcbID;
 	}

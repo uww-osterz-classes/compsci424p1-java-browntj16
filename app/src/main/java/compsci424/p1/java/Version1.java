@@ -22,13 +22,18 @@ public class Version1 {
     /**
      * Default constructor. Use this to allocate (if needed) and
      * initialize the PCB array, create the PCB for process 0, and do
-     * any other initialization that is needed. 
+     * any other initialization that is needed. initialized array length to 100
      */
     public Version1() {
     	pcbArr = new Version1PCB[100];
     	pcbArr[0] = new Version1PCB(-1, 0);
 
     }
+    /**
+     * other constructor in case you want to set array length to a certain length
+     * 
+     * @param len: length you want array to be
+     */
     public Version1(int len) {
     	pcbArr = new Version1PCB[len];
     	pcbArr[0] = new Version1PCB(-1, 0);
@@ -42,37 +47,36 @@ public class Version1 {
      * @return 0 if successful, not 0 if unsuccessful
      */
     int create(int parentPid) {
-        // If parentPid is not in the process hierarchy, do nothing; 
-        // your code may return an error code or message in this case,
-        // but it should not halt
+       // checking to see if there is any free space in array
     	int freePos = findFreeSpace();
     	if (freePos > -1) {
-    		int index = containsPID(parentPid);
-        	if (index > -1) {
-        		Version1PCB newPCB = new Version1PCB(index, freePos);
-    			pcbArr[index].addChild(freePos);
+    		 // If parentPid is not in the process hierarchy, do nothing; 
+            // your code may return an error code or message in this case,
+            // but it should not halt
+    		int parentIndex = containsPID(parentPid);
+        	if (parentIndex > -1) {
+        		//create new pcb object
+        		Version1PCB newPCB = new Version1PCB(parentIndex, freePos);
+        		//adds new pcb as child to parent corresponding to parent id
+    			pcbArr[parentIndex].addChild(freePos);
         		//System.out.println("Parent ID was found and child was created");
+    			//adds newPCB to array
         		pcbArr[freePos] = newPCB;
         		
         	}
     	}
+    	// else happens if array is full
     	else {
     		System.out.println("PCB array is full.");
     	}
     	
-
-        // Assuming you've found the PCB for parentPid in the PCB array:
-        // 1. Allocate and initialize a free PCB object from the array
-        //    of PCB objects
-
-        // 2. Insert the newly allocated PCB object into parentPid's
-        //    list of children
-
-        // You can decide what the return value(s), if any, should be.
-        // If you change the return type/value(s), update the Javadoc.
-        return 0; // often means "success" or "terminated normally"
+        return 0; 
     }
-
+    /**
+     * containsPID finds a parent id in the array (if it is there)
+     * @param pID: the parent id we're trying to find
+     * @return returns -1 if we cannot find parent id, otherwise we return parent id's index
+     */
     private int containsPID(int pID) {
 		for (int i = 0; i < pcbArr.length;i++) {
 			//System.out.println(pcbArr[i].pcbID + " "+ pID);
@@ -96,30 +100,25 @@ public class Version1 {
          // If targetPid is not in the process hierarchy, do nothing; 
          // your code may return an error code or message in this case,
          // but it should not halt
-    	int index = containsPID(targetPid);
-    	if (index >= 0) {
-    		Version1PCB target = pcbArr[index];
+    	int parentIndex = containsPID(targetPid);
+    	if (parentIndex >= 0) {
+    		Version1PCB target = pcbArr[parentIndex];
     		sever(target);
-    		
     	}
-         // Assuming you've found the PCB for targetPid in the PCB array:
-         // 1. Recursively destroy all descendants of targetPid, if it
-         //    has any, and mark their PCBs as "free" in the PCB array 
-         //    (i.e., deallocate them)
-
-         // 2. Remove targetPid from its parent's list of children
-
-         // 3. Deallocate targetPid's PCB and mark its PCB array entry
-         //    as "free"
-
-         // You can decide what the return value(s), if any, should be.
-         // If you change the return type/value(s), update the Javadoc.
+        
         return 0; // often means "success" or "terminated normally"
     }
+    /**
+     * 
+     * @param node: bit of a misnomer as a name. 
+     */
     private void sever(Version1PCB node) {
     	// this if statement is just a check to see if the pcb has a parent
     	// for the original pcb object in the array since it has no parent
+    	
     	if(node.getParent() > -1) {
+    		//if we do find that node has a parent then we find node in its list of 
+    		// children and remove it
     		LinkedList<Integer> list = pcbArr[node.getParent()].getChildren();
     		//searching through children to remove node from list
         	for (int i = 0; i < list.size(); i++) {
@@ -129,10 +128,15 @@ public class Version1 {
         	}
     	}
     	//recursively destroy all children
+    	//basically we just apply sever to each child of node
     	while (!(node.getChildren().isEmpty())) {
 			sever(pcbArr[node.popChild()]);
 		}
+    	//fairly certain there is no reason to setParent to -1 when we just make it null anyways,
+    	// but i'll be damned if it does break something
     	node.setParent(-1);
+    	//removes node from array
+    	// its worth noting that their pcbid corresponds to their position in the array
     	pcbArr[node.getPCBID()] = null;
     }
     /**
@@ -147,6 +151,9 @@ public class Version1 {
      */
     public void showProcessInfo() {
     	for (int i = 0; i < pcbArr.length; i++) {
+    		// if a position in the array is null we skip it
+    		// since earlier positions can be removed and thus become "null"
+    		// to represent their absence we cant skip em
     		if (pcbArr[i] != null) {
     			Version1PCB process = pcbArr[i];
     			LinkedList<Integer> children = pcbArr[i].getChildren();
@@ -162,7 +169,11 @@ public class Version1 {
     		}
     	}
     }
-    
+    /**
+     * finds the first free position of the array
+     * 
+     * @return returns first free position of the array. -1 if there is none
+     */
     private int findFreeSpace() {
     	for (int i = 0; i < pcbArr.length; i++) {
     		if(null == pcbArr[i]) {
@@ -171,6 +182,10 @@ public class Version1 {
     	}
     	return -1;
     }
+    /**
+     * prints out the linked list for output purposes
+     * @param list
+     */
     private void printLinkedList(LinkedList<Integer> list) {
     	for (int i = 0; i < list.size(); i++) {
     		System.out.print(list.get(i) + " ");

@@ -54,6 +54,7 @@ public class Program1 {
     	
     	
     	// time check for v1
+	/*
     	long start = System.currentTimeMillis();
     	for (int i = 0; i < 200; i++) {
     		for (int j = 0; j < commandList.size(); j++) {
@@ -71,7 +72,7 @@ public class Program1 {
     	}
     	end = System.currentTimeMillis() - start;
     	System.out.println("Total run time for v2 is " + end);
-    	
+    	*/
        
         System.out.println("Builds without errors and runs to completion.");
     }

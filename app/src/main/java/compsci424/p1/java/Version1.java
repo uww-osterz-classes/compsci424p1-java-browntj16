@@ -1,9 +1,9 @@
 /* COMPSCI 424 Program 1
  * Name:
  */
-package compsci424.p1.java;
+package p1;
 import java.util.LinkedList;
-
+import java.util.ListIterator; 
 
 /** 
  * Implements the process creation hierarchy for Version 1, which uses
@@ -25,7 +25,7 @@ public class Version1 {
      * any other initialization that is needed. 
      */
     public Version1() {
-    	pcbArr = new Version1PCB[15];
+    	pcbArr = new Version1PCB[100];
     	pcbArr[0] = new Version1PCB(-1, 0);
 
     }

@@ -1,7 +1,7 @@
 /* COMPSCI 424 Program 1
  * Name:
  */
-package compsci424.p1.java;
+package p1;
 
 import java.util.LinkedList;
 

@@ -7,7 +7,7 @@
  * classes, methods, and data structures that you need to solve the
  * problem and display your solution in the correct format.
  */
-package compsci424.p1.java;
+package p1;
 import java.util.LinkedList;
 import java.util.Scanner;
 /**
@@ -39,12 +39,32 @@ public class Program1 {
     		commandList.add(userInp);
     		userInp = inp.nextLine();
     	}
+    	
+    	System.out.println("Version 1: ");
     	for (int i = 0; i < commandList.size(); i++) {
-    		parseCommand(commandList.get(i), v1,v2);
+    		parseCommand1(commandList.get(i), v1);
     	}
+    	System.out.println("Version 2: ");
+    	for (int i = 0; i < commandList.size(); i++) {
+    		parseCommand2(commandList.get(i), v2);
+    	}
+    	long start = System.currentTimeMillis();
+    	for (int i = 0; i < 200; i++) {
+    		for (int j = 0; j < commandList.size(); j++) {
+        		parseCommand1NoShow(commandList.get(j), v1);
+        	}
+    	}
+    	long end = System.currentTimeMillis() - start;
+    	System.out.println("Total run time for v1 is " + end);
     	
-    	
-    	
+    	start = System.currentTimeMillis();
+    	for (int i = 0; i < 200; i++) {
+    		for (int j = 0; j < commandList.size(); j++) {
+        		parseCommand2NoShow(commandList.get(j), v2);
+        	}
+    	}
+    	end = System.currentTimeMillis() - start;
+    	System.out.println("Total run time for v2 is " + end);
         // 2. While the user has not typed "end", continue accepting
         //    commands. Add each command to a list of actions to take 
         //    while you run the simulation.
@@ -79,24 +99,92 @@ public class Program1 {
         System.out.println("Builds without errors and runs to completion.");
     }
 
-	private static void parseCommand(String command, Version1 v1, Version2 v2) {
+	private static void parseCommand1(String command, Version1 v1) {
 		String arr[] = command.split(" ");
-		int num = Integer.parseInt(arr[1]);
-		if(arr[0].equals("destroy")) {
-			v1.destroy(num);
-			v1.showProcessInfo();
-			v2.destroy(num);
-			v2.showProcessInfo();
+		try {
+			int num = Integer.parseInt(arr[1]);
+			if(arr[0].equals("destroy")) {
+				v1.destroy(num);
+				v1.showProcessInfo();
+			}
+			else if(arr[0].equals("create")){
+				v1.create(num);
+				v1.showProcessInfo();
+			}
+			else {
+				System.out.println("Invalid command entered.");
+			}	
 		}
-		else if(arr[0].equals("create")){
-			v1.create(num);
-			v1.showProcessInfo();
-			v2.create(num);
-			v2.showProcessInfo();
+		catch (Exception e) {
+			System.out.println("Error! Invalid command likely entered!");
 		}
-		else {
-			System.out.println("Invalid command entered.");
+		
+		
+	}
+	private static void parseCommand1NoShow(String command, Version1 v1) {
+		String arr[] = command.split(" ");
+		try {
+			int num = Integer.parseInt(arr[1]);
+			if(arr[0].equals("destroy")) {
+				v1.destroy(num);
+				//v1.showProcessInfo();
+			}
+			else if(arr[0].equals("create")){
+				v1.create(num);
+				//v1.showProcessInfo();
+			}
+			else {
+				System.out.println("Invalid command entered.");
+			}
 		}
+		catch (Exception e) {
+			System.out.println("Error! Invalid command likely entered!");
+		}
+		
+		
+	}
+	private static void parseCommand2(String command, Version2 v2) {
+		String arr[] = command.split(" ");
+		try {
+			int num = Integer.parseInt(arr[1]);
+			if(arr[0].equals("destroy")) {			
+				v2.destroy(num);
+				v2.showProcessInfo();
+			}
+			else if(arr[0].equals("create")){
+				v2.create(num);
+				v2.showProcessInfo();
+			}
+			else {
+				System.out.println("Invalid command entered.");
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Error! Invalid command likely entered!");
+		}
+		
+		
+	}
+	private static void parseCommand2NoShow(String command, Version2 v2) {
+		String arr[] = command.split(" ");
+		try {
+			int num = Integer.parseInt(arr[1]);
+			if(arr[0].equals("destroy")) {			
+				v2.destroy(num);
+				//v2.showProcessInfo();
+			}
+			else if(arr[0].equals("create")){
+				v2.create(num);
+				//v2.showProcessInfo();
+			}
+			else {
+				System.out.println("Invalid command entered.");
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Error! Invalid command likely entered!");
+		}
+		
 		
 	}
 }

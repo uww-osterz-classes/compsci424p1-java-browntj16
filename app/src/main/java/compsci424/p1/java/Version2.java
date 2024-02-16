@@ -1,7 +1,7 @@
 /* COMPSCI 424 Program 1
  * Name:
  */
-package compsci424.p1.java;
+package p1;
 
 import java.util.LinkedList;
 
@@ -24,7 +24,7 @@ public class Version2 {
      * any other initialization that is needed. 
      */
 	public Version2() {
-    	pcbArr = new Version2PCB[15];
+    	pcbArr = new Version2PCB[100];
     	pcbArr[0] = new Version2PCB(-1, 0);
 
     }

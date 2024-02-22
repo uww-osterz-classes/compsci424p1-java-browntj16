@@ -192,7 +192,7 @@ public class Version2 {
     	}
     	// if target has any children we recursively destroy them
     	if (target.getFirstChild() > -1) {
-    		destroyChildren(pcbArr[target.getFirstChild()]);
+    		destroyChildren(pcbArr[target.getPCBID()]);
     	}
     	//destroys itself
     	pcbArr[target.getParent()].setFirstChild(-1); 
